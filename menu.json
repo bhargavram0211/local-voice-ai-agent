@@ -1,0 +1,126 @@
+{
+  "restaurant_name": "Spice Garden",
+  "tax_rate": 8.5,
+  "categories": [
+    {
+      "name": "Appetizers",
+      "allows_spice_customization": true,
+      "items": [
+        {
+          "id": "samosa",
+          "name": "Vegetable Samosa",
+          "description": "Crispy pastry filled with spiced potatoes and peas",
+          "price": 4.99
+        },
+        {
+          "id": "chicken_pakora",
+          "name": "Chicken Pakora",
+          "description": "Crispy fried chicken chunks in spiced chickpea batter",
+          "price": 6.99
+        },
+        {
+          "id": "paneer_tikka",
+          "name": "Paneer Tikka",
+          "description": "Grilled cottage cheese cubes marinated in spices",
+          "price": 7.99
+        }
+      ]
+    },
+    {
+      "name": "Main Courses",
+      "allows_spice_customization": true,
+      "items": [
+        {
+          "id": "butter_chicken",
+          "name": "Butter Chicken",
+          "description": "Tender chicken in creamy tomato and butter sauce",
+          "price": 14.99
+        },
+        {
+          "id": "palak_paneer",
+          "name": "Palak Paneer",
+          "description": "Cottage cheese in spiced spinach gravy",
+          "price": 12.99
+        },
+        {
+          "id": "lamb_curry",
+          "name": "Lamb Curry",
+          "description": "Slow-cooked lamb in aromatic curry sauce",
+          "price": 16.99
+        }
+      ]
+    },
+    {
+      "name": "Biryanis & Pulav",
+      "allows_spice_customization": true,
+      "items": [
+        {
+          "id": "chicken_biryani",
+          "name": "Chicken Biryani",
+          "description": "Fragrant basmati rice with spiced chicken layers",
+          "price": 13.99
+        },
+        {
+          "id": "vegetable_biryani",
+          "name": "Vegetable Biryani",
+          "description": "Mixed vegetables and rice with aromatic spices",
+          "price": 11.99
+        },
+        {
+          "id": "goat_pulav",
+          "name": "Goat Pulav",
+          "description": "Tender goat meat with seasoned rice",
+          "price": 15.99
+        }
+      ]
+    },
+    {
+      "name": "Breads",
+      "allows_spice_customization": false,
+      "items": [
+        {
+          "id": "garlic_naan",
+          "name": "Garlic Naan",
+          "description": "Soft flatbread topped with garlic and herbs",
+          "price": 3.99
+        },
+        {
+          "id": "roti",
+          "name": "Roti",
+          "description": "Whole wheat unleavened flatbread",
+          "price": 2.99
+        },
+        {
+          "id": "kulcha",
+          "name": "Kulcha",
+          "description": "Leavened flatbread baked in tandoor",
+          "price": 4.49
+        }
+      ]
+    },
+    {
+      "name": "Dessert",
+      "allows_spice_customization": false,
+      "items": [
+        {
+          "id": "gulab_jamun",
+          "name": "Gulab Jamun",
+          "description": "Milk dumplings in rose-scented sugar syrup",
+          "price": 5.99
+        },
+        {
+          "id": "gajar_halwa",
+          "name": "Gajar Halwa",
+          "description": "Carrot pudding with cardamom and nuts",
+          "price": 6.49
+        },
+        {
+          "id": "rasmalai",
+          "name": "Rasmalai",
+          "description": "Soft cheese patties in sweetened milk",
+          "price": 6.99
+        }
+      ]
+    }
+  ]
+}

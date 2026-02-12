@@ -9,4 +9,5 @@ dependencies = [
     "kokoro-onnx>=0.4.7",
     "loguru>=0.7.3",
     "ollama>=0.4.7",
+    "pytest>=8.0.0",
 ]
