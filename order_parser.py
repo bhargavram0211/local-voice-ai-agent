@@ -74,6 +74,74 @@ def build_menu_index(menu: dict) -> list[tuple[dict, str]]:
     return result
 
 
+def _edit_distance(a: str, b: str) -> int:
+    """Levenshtein distance between two strings."""
+    if not a:
+        return len(b)
+    if not b:
+        return len(a)
+    prev = list(range(len(b) + 1))
+    for i, ca in enumerate(a, 1):
+        curr = [i]
+        for j, cb in enumerate(b, 1):
+            curr.append(min(
+                prev[j] + 1,
+                curr[-1] + 1,
+                prev[j - 1] + (0 if ca == cb else 1),
+            ))
+        prev = curr
+    return prev[-1]
+
+
+def _word_fuzzy_match(item_word: str, transcript_words: list[str]) -> bool:
+    """True if any transcript word is exact or within edit distance of item_word (STT errors). Conservative: require similar length to avoid false positives."""
+    for tw in transcript_words:
+        if item_word == tw:
+            return True
+        if abs(len(item_word) - len(tw)) > 2:
+            continue
+        if len(item_word) < 4 and len(tw) < 4 and _edit_distance(item_word, tw) <= 1:
+            return True
+        if len(item_word) >= 4 and len(tw) >= 4:
+            max_edit = 2 if min(len(item_word), len(tw)) <= 4 else 3
+            if _edit_distance(item_word, tw) <= max_edit:
+                return True
+    return False
+
+
+def _item_name_matches_text(norm_name: str, norm: str) -> bool:
+    """True if norm_name appears in norm as substring, or all words of norm_name appear in order (exact or fuzzy)."""
+    if norm_name in norm:
+        return True
+    name_words = norm_name.split()
+    if len(name_words) <= 1:
+        return False
+    transcript_words = norm.split()
+    pos = 0
+    word_starts: list[tuple[int, int]] = []
+    for tw in transcript_words:
+        idx = norm.find(tw, pos)
+        if idx == -1:
+            break
+        word_starts.append((idx, idx + len(tw)))
+        pos = idx + len(tw)
+    start = 0
+    for w in name_words:
+        idx = norm.find(w, start)
+        if idx != -1:
+            start = idx + len(w)
+            continue
+        found = False
+        for (st, end), tw in zip(word_starts, transcript_words):
+            if st >= start and _word_fuzzy_match(w, [tw]):
+                start = end
+                found = True
+                break
+        if not found:
+            return False
+    return True
+
+
 def match_item_mentions(text: str, menu: dict) -> list[tuple[dict, str]]:
     """Find menu items mentioned in text. Return list of (item_dict, category_name). Prefer exact/near-exact name match."""
     norm = normalize_text(text)
@@ -82,7 +150,7 @@ def match_item_mentions(text: str, menu: dict) -> list[tuple[dict, str]]:
     for item, cat_name in index:
         name = item.get("name", "")
         norm_name = normalize_text(name)
-        if norm_name in norm:
+        if norm_name in norm or _item_name_matches_text(norm_name, norm):
             matched.append((item, cat_name))
     # Prefer longer names first so "Chicken Biryani" matches before "Chicken" if both exist
     matched.sort(key=lambda x: -len(x[0].get("name", "")))
@@ -97,12 +165,32 @@ def match_item_mentions(text: str, menu: dict) -> list[tuple[dict, str]]:
     return out
 
 
-def extract_quantity_for_item(text: str, item_name: str) -> int:
-    """Extract quantity for an item from text. Default 1."""
-    norm = normalize_text(text)
-    # Number immediately before or after item name
+def _quantity_before_fuzzy_item(norm: str, item_name: str) -> int | None:
+    """If item name (or fuzzy match) appears in norm, return quantity word/digit immediately before it, else None."""
     norm_name = normalize_text(item_name)
-    # Pattern: "2 butter chicken" or "two butter chicken" or "butter chicken 2"
+    name_words = norm_name.split()
+    if not name_words:
+        return None
+    first_word = name_words[0]
+    transcript_words = norm.split()
+    for i, tw in enumerate(transcript_words):
+        if first_word == tw or _word_fuzzy_match(first_word, [tw]):
+            if i > 0:
+                prev = transcript_words[i - 1]
+                for w, num in _QUANTITY_WORDS.items():
+                    if prev == w:
+                        return num
+                if prev.isdigit():
+                    return max(1, int(prev))
+            return None
+    return None
+
+
+def extract_quantity_for_item(text: str, item_name: str) -> int:
+    """Extract quantity for an item from text. Default 1. Tolerates transcript spelling (e.g. Gagar vs Gajar)."""
+    norm = normalize_text(text)
+    norm_name = normalize_text(item_name)
+    # Exact: "2 butter chicken" or "two butter chicken" or "butter chicken 2"
     for word, num in _QUANTITY_WORDS.items():
         if word in ("a", "an") and num == 1:
             continue
@@ -110,13 +198,16 @@ def extract_quantity_for_item(text: str, item_name: str) -> int:
             return num
         if re.search(rf"{re.escape(norm_name)}\s+{re.escape(word)}\b", norm):
             return num
-    # Digits
     m = re.search(rf"\b(\d+)\s+{re.escape(norm_name)}", norm)
     if m:
         return max(1, int(m.group(1)))
     m = re.search(rf"{re.escape(norm_name)}\s+(\d+)\b", norm)
     if m:
         return max(1, int(m.group(1)))
+    # Fallback: item may be fuzzy-matched (e.g. "gagar halwa"); look for quantity before that
+    q = _quantity_before_fuzzy_item(norm, item_name)
+    if q is not None:
+        return q
     return 1
 
 

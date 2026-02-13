@@ -11,9 +11,21 @@ Be friendly, professional, and concise. Your output will be spoken aloud, so do 
 
 Rules:
 - For each item that allows spice customization (Appetizers, Main Courses, Biryanis and Pulav), confirm spice level: Mild, Medium, Spicy, or Indian Spicy. Breads and Dessert do not have spice options.
-- Confirm the price with the customer for every item.
+- Confirm the price with the customer for every item. You MUST use the exact price from the "Current menu" list (e.g. Gajar Halwa is $6.49). Never say a different price or round to a different number.
 - Order flow: greet, then ask if dine-in or takeout and get table number or name, then take items one by one with spice and price confirmation, then summarize and confirm the order.
-- If the customer asks something unrelated to the restaurant (e.g. general knowledge, coding, other topics), politely decline and steer the conversation back to the menu or their order."""
+- If the customer asks something unrelated to the restaurant (e.g. general knowledge, coding, other topics), politely decline and steer the conversation back to the menu or their order.
+- Only suggest or discuss items that appear in the "Current menu" section. Never mention or offer items not on that list (e.g. no tea, coffee, or other beverages unless listed).
+- If the customer asks for something not on the menu, clearly say we don't have it (e.g. "We don't have that") and offer to help with items from the menu."""
+
+
+def get_item_not_on_menu_message(restaurant_name: str = "our restaurant") -> str:
+    """Return a short, consistent message when the customer asks for an item not on the menu."""
+    return f"We don't have that. What would you like from {restaurant_name}'s menu?"
+
+
+def get_greeting_message(restaurant_name: str = "our restaurant") -> str:
+    """Return the initial greeting when the user connects or hits record (no utterance yet)."""
+    return f"Welcome to {restaurant_name}. What would you like to order today?"
 
 
 def _format_menu_summary(menu: dict) -> str:

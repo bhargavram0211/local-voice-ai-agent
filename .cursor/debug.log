@@ -1,0 +1,48 @@
+{"hypothesisId": "H3b", "message": "echo after parse", "data": {"transcript_preview": "Hello", "num_new_items": 0}, "timestamp": 1771006557.490871}
+{"hypothesisId": "H3a", "message": "echo tax_rate from menu", "data": {"tax_rate": 8.5, "menu_has_tax_rate": true}, "timestamp": 1771006557.490974}
+{"hypothesisId": "H3b", "message": "echo after merge", "data": {"order_tax": 0.0, "order_tax_rate": 8.5, "order_subtotal": 0, "num_items": 0}, "timestamp": 1771006557.491076}
+{"hypothesisId": "H1c", "message": "get_ui_state transcript", "data": {"history_len": 4, "first_role": "user"}, "timestamp": 1771006565.361067}
+{"hypothesisId": "H3b", "message": "get_ui_state cart", "data": {"order_is_none": false, "tax": 0.0, "tax_rate": 8.5, "subtotal": 0, "num_items": 0}, "timestamp": 1771006565.361307}
+{"hypothesisId": "H1a", "message": "on_additional_outputs called", "data": {"num_args": 2, "transcript_len": 4}, "timestamp": 1771006565.490587}
+{"hypothesisId": "H1c", "message": "get_ui_state transcript", "data": {"history_len": 6, "first_role": "user"}, "timestamp": 1771006573.866954}
+{"hypothesisId": "H3b", "message": "get_ui_state cart", "data": {"order_is_none": false, "tax": 0.0, "tax_rate": 8.5, "subtotal": 0, "num_items": 0}, "timestamp": 1771006573.8673978}
+{"hypothesisId": "H1a", "message": "on_additional_outputs called", "data": {"num_args": 2, "transcript_len": 6}, "timestamp": 1771006573.8783202}
+{"hypothesisId": "H3b", "message": "echo after parse", "data": {"transcript_preview": "Give me one part of chicken.", "num_new_items": 0}, "timestamp": 1771006579.404232}
+{"hypothesisId": "H3a", "message": "echo tax_rate from menu", "data": {"tax_rate": 8.5, "menu_has_tax_rate": true}, "timestamp": 1771006579.404484}
+{"hypothesisId": "H3b", "message": "echo after merge", "data": {"order_tax": 0.0, "order_tax_rate": 8.5, "order_subtotal": 0, "num_items": 0}, "timestamp": 1771006579.4048269}
+{"hypothesisId": "H1c", "message": "get_ui_state transcript", "data": {"history_len": 8, "first_role": "user"}, "timestamp": 1771006581.728512}
+{"hypothesisId": "H3b", "message": "get_ui_state cart", "data": {"order_is_none": false, "tax": 0.0, "tax_rate": 8.5, "subtotal": 0, "num_items": 0}, "timestamp": 1771006581.7291079}
+{"hypothesisId": "H1a", "message": "on_additional_outputs called", "data": {"num_args": 2, "transcript_len": 8}, "timestamp": 1771006581.7582889}
+{"hypothesisId": "H1c", "message": "get_ui_state transcript", "data": {"history_len": 12, "first_role": "user"}, "timestamp": 1771006592.5230541}
+{"hypothesisId": "H3b", "message": "get_ui_state cart", "data": {"order_is_none": false, "tax": 0.0, "tax_rate": 8.5, "subtotal": 0, "num_items": 0}, "timestamp": 1771006592.523319}
+{"hypothesisId": "H1a", "message": "on_additional_outputs called", "data": {"num_args": 2, "transcript_len": 12}, "timestamp": 1771006592.544717}
+{"hypothesisId": "H3b", "message": "echo after parse", "data": {"transcript_preview": "And peace out.", "num_new_items": 0}, "timestamp": 1771006593.885327}
+{"hypothesisId": "H3a", "message": "echo tax_rate from menu", "data": {"tax_rate": 8.5, "menu_has_tax_rate": true}, "timestamp": 1771006593.885448}
+{"hypothesisId": "H3b", "message": "echo after merge", "data": {"order_tax": 0.0, "order_tax_rate": 8.5, "order_subtotal": 0, "num_items": 0}, "timestamp": 1771006593.885504}
+{"hypothesisId": "H1c", "message": "get_ui_state transcript", "data": {"history_len": 14, "first_role": "user"}, "timestamp": 1771006600.3101351}
+{"hypothesisId": "H3b", "message": "get_ui_state cart", "data": {"order_is_none": false, "tax": 0.0, "tax_rate": 8.5, "subtotal": 0, "num_items": 0}, "timestamp": 1771006600.31025}
+{"hypothesisId": "H1a", "message": "on_additional_outputs called", "data": {"num_args": 2, "transcript_len": 14}, "timestamp": 1771006600.332277}
+{"hypothesisId": "H3b", "message": "echo after parse", "data": {"transcript_preview": "I would like to go with the main course for today.", "num_new_items": 0}, "timestamp": 1771006609.469617}
+{"hypothesisId": "H3a", "message": "echo tax_rate from menu", "data": {"tax_rate": 8.5, "menu_has_tax_rate": true}, "timestamp": 1771006609.4697201}
+{"hypothesisId": "H3b", "message": "echo after merge", "data": {"order_tax": 0.0, "order_tax_rate": 8.5, "order_subtotal": 0, "num_items": 0}, "timestamp": 1771006609.469816}
+{"hypothesisId": "H1c", "message": "get_ui_state transcript", "data": {"history_len": 16, "first_role": "user"}, "timestamp": 1771006612.147264}
+{"hypothesisId": "H3b", "message": "get_ui_state cart", "data": {"order_is_none": false, "tax": 0.0, "tax_rate": 8.5, "subtotal": 0, "num_items": 0}, "timestamp": 1771006612.147416}
+{"hypothesisId": "H1a", "message": "on_additional_outputs called", "data": {"num_args": 2, "transcript_len": 16}, "timestamp": 1771006612.165235}
+{"hypothesisId": "H3b", "message": "echo after parse", "data": {"transcript_preview": "What do you have available on the menu?", "num_new_items": 0}, "timestamp": 1771006621.3124511}
+{"hypothesisId": "H3a", "message": "echo tax_rate from menu", "data": {"tax_rate": 8.5, "menu_has_tax_rate": true}, "timestamp": 1771006621.312567}
+{"hypothesisId": "H3b", "message": "echo after merge", "data": {"order_tax": 0.0, "order_tax_rate": 8.5, "order_subtotal": 0, "num_items": 0}, "timestamp": 1771006621.312635}
+{"hypothesisId": "H1c", "message": "get_ui_state transcript", "data": {"history_len": 20, "first_role": "user"}, "timestamp": 1771006632.739979}
+{"hypothesisId": "H3b", "message": "get_ui_state cart", "data": {"order_is_none": false, "tax": 0.0, "tax_rate": 8.5, "subtotal": 0, "num_items": 0}, "timestamp": 1771006632.740246}
+{"hypothesisId": "H1a", "message": "on_additional_outputs called", "data": {"num_args": 2, "transcript_len": 20}, "timestamp": 1771006632.761098}
+{"hypothesisId": "H1c", "message": "get_ui_state transcript", "data": {"history_len": 28, "first_role": "user"}, "timestamp": 1771006642.874777}
+{"hypothesisId": "H3b", "message": "get_ui_state cart", "data": {"order_is_none": false, "tax": 0.0, "tax_rate": 8.5, "subtotal": 0, "num_items": 0}, "timestamp": 1771006642.875045}
+{"hypothesisId": "H1a", "message": "on_additional_outputs called", "data": {"num_args": 2, "transcript_len": 28}, "timestamp": 1771006642.892916}
+{"hypothesisId": "H1c", "message": "get_ui_state transcript", "data": {"history_len": 4, "first_role": "user"}, "timestamp": 1771006693.502822}
+{"hypothesisId": "H3b", "message": "get_ui_state cart", "data": {"order_is_none": true, "tax": null, "tax_rate": null, "subtotal": null, "num_items": 0}, "timestamp": 1771006693.502971}
+{"hypothesisId": "H1a", "message": "on_additional_outputs called", "data": {"num_args": 2, "transcript_len": 4}, "timestamp": 1771006693.525292}
+{"hypothesisId": "H3b", "message": "echo after parse", "data": {"transcript_preview": "What do you have available on your menu?", "num_new_items": 0}, "timestamp": 1771006699.046863}
+{"hypothesisId": "H3a", "message": "echo tax_rate from menu", "data": {"tax_rate": 8.5, "menu_has_tax_rate": true}, "timestamp": 1771006699.04696}
+{"hypothesisId": "H3b", "message": "echo after merge", "data": {"order_tax": 0.0, "order_tax_rate": 8.5, "order_subtotal": 0, "num_items": 0}, "timestamp": 1771006699.047075}
+{"hypothesisId": "H1c", "message": "get_ui_state transcript", "data": {"history_len": 8, "first_role": "user"}, "timestamp": 1771006708.43919}
+{"hypothesisId": "H3b", "message": "get_ui_state cart", "data": {"order_is_none": false, "tax": 0.0, "tax_rate": 8.5, "subtotal": 0, "num_items": 0}, "timestamp": 1771006708.439467}
+{"hypothesisId": "H1a", "message": "on_additional_outputs called", "data": {"num_args": 2, "transcript_len": 8}, "timestamp": 1771006708.446144}

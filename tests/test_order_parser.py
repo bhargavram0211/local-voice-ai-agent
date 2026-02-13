@@ -73,6 +73,12 @@ def test_quantity_default_one() -> None:
     assert parsed.new_items[0].name == "Butter Chicken"
 
 
+def test_quantity_two_when_transcript_spelling_differs() -> None:
+    """Quantity extracted when STT spells item differently (e.g. Gagar vs Gajar)."""
+    assert extract_quantity_for_item("two gagar halwa", "Gajar Halwa") == 2
+    assert extract_quantity_for_item("I'd like two gajar halwa", "Gajar Halwa") == 2
+
+
 def test_spice_level_indian_spicy() -> None:
     """Make the butter chicken Indian spicy -> spice_level Indian Spicy."""
     state = create_initial_state()

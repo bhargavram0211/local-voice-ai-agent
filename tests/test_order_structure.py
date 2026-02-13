@@ -7,8 +7,9 @@ import pytest
 from order_structure import (
     Order,
     OrderItem,
-    generate_order_id,
     calculate_order_totals,
+    generate_order_id,
+    order_to_cart_markdown,
     order_to_dict,
     order_to_json,
 )
@@ -159,3 +160,36 @@ def test_calculate_order_totals_empty_list() -> None:
     assert subtotal == 0.0
     assert tax == 0.0
     assert total == 0.0
+
+
+def test_order_to_cart_markdown_empty() -> None:
+    """Test order_to_cart_markdown with None returns empty cart message."""
+    md = order_to_cart_markdown(None)
+    assert "Cart" in md
+    assert "empty" in md.lower()
+
+
+def test_order_to_cart_markdown_with_items() -> None:
+    """Test order_to_cart_markdown with items includes names, totals."""
+    items = [
+        OrderItem("a", "Butter Chicken", "Main", 2, "Medium", 14.99, 29.98),
+        OrderItem("b", "Naan", "Breads", 1, None, 3.99, 3.99),
+    ]
+    order = Order(
+        order_id="ord_1",
+        restaurant_name="Test",
+        order_type="dine_in",
+        table_or_name="Table 1",
+        items=items,
+        subtotal=33.97,
+        tax_rate=8.5,
+        tax=2.89,
+        total=36.86,
+        timestamp="2026-02-12T12:00:00Z",
+    )
+    md = order_to_cart_markdown(order)
+    assert "Butter Chicken" in md
+    assert "Naan" in md
+    assert "29.98" in md
+    assert "Subtotal" in md
+    assert "36.86" in md

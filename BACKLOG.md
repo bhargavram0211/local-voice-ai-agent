@@ -11,4 +11,14 @@ Items deferred for later. Not in current scope.
 
 ---
 
+## Voice agent / UX
+
+- **Noise suppression / background voices**  
+  STT currently transcribes everything in the audio (user + background). Reduce agent reacting to background speech (e.g. VAD, noise suppression, or STT settings). Deferred.
+
+- **Latency and voice breaking up**  
+  Improve perceived latency and smoothness (e.g. stream LLM to TTS, shorten responses, or tune TTS chunking/playback). Deferred.
+
+---
+
 *Add new backlog items below.*

@@ -80,3 +80,16 @@ def order_to_dict(order: Order) -> dict:
 def order_to_json(order: Order) -> str:
     """Convert Order to JSON string."""
     return json.dumps(order_to_dict(order), indent=2)
+
+
+def order_to_cart_markdown(order: Order | None) -> str:
+    """Format order as Markdown for UI cart sidebar. Empty order returns 'Your cart is empty.'"""
+    if order is None or not order.items:
+        return "**Cart**\n\nYour cart is empty."
+    lines = ["**Cart**", ""]
+    for it in order.items:
+        spice = f", {it.spice_level}" if it.spice_level else ""
+        lines.append(f"- {it.name} x{it.quantity}{spice} — ${it.item_total:.2f}")
+    lines.append("")
+    lines.append(f"Subtotal: ${order.subtotal:.2f} | Tax: ${order.tax:.2f} | **Total: ${order.total:.2f}**")
+    return "\n".join(lines)

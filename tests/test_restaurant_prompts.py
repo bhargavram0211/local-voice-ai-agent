@@ -7,6 +7,8 @@ from order_structure import Order, OrderItem
 from restaurant_prompts import (
     build_system_prompt,
     get_base_system_prompt,
+    get_greeting_message,
+    get_item_not_on_menu_message,
     get_refusal_message,
     is_off_topic,
 )
@@ -132,3 +134,21 @@ def test_get_refusal_message_with_restaurant_name() -> None:
     msg = get_refusal_message("Spice Garden")
     assert "Spice Garden" in msg
     assert "order" in msg.lower()
+
+
+def test_get_greeting_message() -> None:
+    """Test get_greeting_message returns welcome text with restaurant name."""
+    msg = get_greeting_message("Spice Garden")
+    assert "Welcome" in msg
+    assert "Spice Garden" in msg
+    assert "order" in msg.lower()
+
+
+def test_get_item_not_on_menu_message() -> None:
+    """Test get_item_not_on_menu_message returns we-don't-have-it style text with menu."""
+    msg = get_item_not_on_menu_message("Spice Garden")
+    assert "don't have" in msg or "dont have" in msg.lower()
+    assert "Spice Garden" in msg or "menu" in msg.lower()
+    msg_default = get_item_not_on_menu_message()
+    assert "don't have" in msg_default or "dont have" in msg_default.lower()
+    assert "menu" in msg_default.lower()
