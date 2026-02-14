@@ -216,3 +216,53 @@ def test_merge_into_existing_order() -> None:
     assert len(order.items) == 2
     assert order.subtotal == pytest.approx(14.99 + 3.99)
     assert order.tax_rate == 8.5
+
+
+def test_quantity_two_portions_of_butter_chicken() -> None:
+    """Two portions of butter chicken -> qty 2 via look-back or portions pattern."""
+    assert extract_quantity_for_item("two portions of butter chicken", "Butter Chicken") == 2
+    state = create_initial_state()
+    parsed = parse_llm_response("Yeah I'd like two portions of butter chicken please", _SAMPLE_MENU, state)
+    assert len(parsed.new_items) == 1
+    assert parsed.new_items[0].name == "Butter Chicken"
+    assert parsed.new_items[0].quantity == 2
+
+
+def test_quantity_can_i_get_two_butter_chicken() -> None:
+    """Can I get two butter chicken -> qty 2 (look-back)."""
+    assert extract_quantity_for_item("can I get two butter chicken", "Butter Chicken") == 2
+
+
+def test_quantity_a_couple_of_butter_chicken() -> None:
+    """A couple of butter chicken -> qty 2."""
+    assert extract_quantity_for_item("a couple of butter chicken", "Butter Chicken") == 2
+
+
+def test_quantity_2x_and_double() -> None:
+    """2x butter chicken and double butter chicken -> qty 2."""
+    assert extract_quantity_for_item("2x butter chicken", "Butter Chicken") == 2
+    assert extract_quantity_for_item("double butter chicken", "Butter Chicken") == 2
+    assert extract_quantity_for_item("butter chicken double", "Butter Chicken") == 2
+
+
+def test_quantity_portion_of_butter_chicken() -> None:
+    """Portion of butter chicken or one portion of -> qty 1."""
+    assert extract_quantity_for_item("portion of butter chicken", "Butter Chicken") == 1
+    assert extract_quantity_for_item("one portion of butter chicken", "Butter Chicken") == 1
+
+
+def test_order_type_taking_it_to_go_and_for_takeout() -> None:
+    """I'm taking it to go and for takeout -> takeout."""
+    assert extract_order_type("I'm taking it to go") == "takeout"
+    assert extract_order_type("for takeout please") == "takeout"
+    assert extract_order_type("carry out") == "takeout"
+
+
+def test_extract_table_five_and_name_variants() -> None:
+    """Table five -> Table 5; under John, for John, name is John -> John."""
+    assert extract_table_or_name("table five") == "Table 5"
+    assert extract_table_or_name("table 7") == "Table 7"
+    assert extract_table_or_name("under John") == "John"
+    assert extract_table_or_name("for John") == "John"
+    assert extract_table_or_name("name is John") == "John"
+    assert extract_table_or_name("it's for Sarah") == "Sarah"

@@ -165,8 +165,11 @@ def match_item_mentions(text: str, menu: dict) -> list[tuple[dict, str]]:
     return out
 
 
+_MAX_QUANTITY_LOOKBACK = 5
+
+
 def _quantity_before_fuzzy_item(norm: str, item_name: str) -> int | None:
-    """If item name (or fuzzy match) appears in norm, return quantity word/digit immediately before it, else None."""
+    """If item name (or fuzzy match) appears in norm, return quantity word/digit within look-back window before it, else None."""
     norm_name = normalize_text(item_name)
     name_words = norm_name.split()
     if not name_words:
@@ -175,13 +178,17 @@ def _quantity_before_fuzzy_item(norm: str, item_name: str) -> int | None:
     transcript_words = norm.split()
     for i, tw in enumerate(transcript_words):
         if first_word == tw or _word_fuzzy_match(first_word, [tw]):
-            if i > 0:
-                prev = transcript_words[i - 1]
+            # Look back up to _MAX_QUANTITY_LOOKBACK words for a quantity
+            start = max(0, i - _MAX_QUANTITY_LOOKBACK)
+            for j in range(i - 1, start - 1, -1):
+                if j < 0:
+                    break
+                token = transcript_words[j]
                 for w, num in _QUANTITY_WORDS.items():
-                    if prev == w:
+                    if token == w:
                         return num
-                if prev.isdigit():
-                    return max(1, int(prev))
+                if token.isdigit():
+                    return max(1, int(token))
             return None
     return None
 
@@ -204,6 +211,22 @@ def extract_quantity_for_item(text: str, item_name: str) -> int:
     m = re.search(rf"{re.escape(norm_name)}\s+(\d+)\b", norm)
     if m:
         return max(1, int(m.group(1)))
+    # "N portions/cups/plates of <item>" or "portion of <item>" -> 1
+    portions_pattern = rf"\b(one|two|three|four|five|six|seven|eight|nine|ten|\d+)\s+(?:portions?|cups?|plates?)\s+of\s+{re.escape(norm_name)}"
+    m = re.search(portions_pattern, norm)
+    if m:
+        g = m.group(1)
+        if g.isdigit():
+            return max(1, int(g))
+        return _QUANTITY_WORDS.get(g, 1)
+    if re.search(rf"\b(?:portion|cup|plate)\s+of\s+{re.escape(norm_name)}", norm):
+        return 1
+    # "2x butter chicken" or "double butter chicken"
+    m = re.search(rf"\b(\d+)x\s+{re.escape(norm_name)}", norm)
+    if m:
+        return max(1, int(m.group(1)))
+    if re.search(rf"\bdouble\s+{re.escape(norm_name)}", norm) or re.search(rf"{re.escape(norm_name)}\s+double\b", norm):
+        return 2
     # Fallback: item may be fuzzy-matched (e.g. "gagar halwa"); look for quantity before that
     q = _quantity_before_fuzzy_item(norm, item_name)
     if q is not None:
@@ -229,9 +252,18 @@ def extract_spice_level(text: str) -> str | None:
 def extract_order_type(text: str) -> str | None:
     """Extract dine_in or takeout from text."""
     norm = normalize_text(text)
-    if any(x in norm for x in ["dine in", "dining in", "eat here", "dine-in"]):
+    dine_in_phrases = [
+        "dine in", "dining in", "eat here", "dine-in",
+        "eating in", "dine here", "for here", "sit down",
+    ]
+    if any(x in norm for x in dine_in_phrases):
         return "dine_in"
-    if any(x in norm for x in ["takeout", "take out", "to go", "to-go", "pickup", "pick up"]):
+    takeout_phrases = [
+        "takeout", "take out", "to go", "to-go", "pickup", "pick up",
+        "taking it to go", "take it to go", "for takeout", "for take out",
+        "order takeout", "pick up order", "carry out", "carryout",
+    ]
+    if any(x in norm for x in takeout_phrases):
         return "takeout"
     return None
 
@@ -239,12 +271,31 @@ def extract_order_type(text: str) -> str | None:
 def extract_table_or_name(text: str) -> str | None:
     """Extract table number or customer name."""
     norm = normalize_text(text)
-    # Table 5, table 7
+    # Table 5, table 7 (digit)
     m = re.search(r"\btable\s+(\d+)\b", norm)
     if m:
         return f"Table {m.group(1)}"
-    # for John, under Bhargav
+    # table five, table ten (word)
+    for word, num in _QUANTITY_WORDS.items():
+        if word in ("a", "an"):
+            continue
+        if re.search(rf"\btable\s+{re.escape(word)}\b", norm):
+            return f"Table {num}"
+    # table number 5, table no 5
+    m = re.search(r"\btable\s+(?:number|no\.?)\s+(\d+)\b", norm)
+    if m:
+        return f"Table {m.group(1)}"
+    # for John, under Bhargav, name is John, it's for John, order for John
     m = re.search(r"\b(?:for|under)\s+([a-z]+)\b", norm)
+    if m:
+        return m.group(1).title()
+    m = re.search(r"\bname\s+is\s+([a-z]+)\b", norm)
+    if m:
+        return m.group(1).title()
+    m = re.search(r"\bit'?s\s+for\s+([a-z]+)\b", norm)
+    if m:
+        return m.group(1).title()
+    m = re.search(r"\border\s+for\s+([a-z]+)\b", norm)
     if m:
         return m.group(1).title()
     return None

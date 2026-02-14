@@ -95,11 +95,16 @@ def _looks_like_item_request(transcript: str) -> bool:
             "i'd like",
             "i would like",
             "can i get",
+            "could i get",
+            "could i please get",
             "give me",
             "i'll have",
             "i will have",
             "add",
             "get me",
+            "get some",
+            "have a",
+            "they have",
             "tea",
             "coffee",
         )
@@ -199,18 +204,17 @@ def echo(audio):
     # 4. Stage transitions
     _apply_stage_transitions(transcript)
 
-    # 4b. Item not on menu: customer asked for something but nothing matched
-    if current_state.stage in (ConversationStage.ORDERING, ConversationStage.ORDER_TYPE):
-        if len(parsed.new_items) == 0 and _looks_like_item_request(transcript):
-            msg = get_item_not_on_menu_message(restaurant_name)
-            conversation_history.append({"role": "user", "content": transcript})
-            conversation_history.append({"role": "assistant", "content": msg})
-            if len(conversation_history) > _MAX_HISTORY_MESSAGES:
-                conversation_history = conversation_history[-_MAX_HISTORY_MESSAGES:]
-            for ch in tts_model.stream_tts_sync(clean_for_tts(msg)):
-                yield ch
-            yield AdditionalOutputs(*_get_ui_state())
-            return
+    # 4b. Item not on menu: customer asked for something but nothing matched (any stage)
+    if len(parsed.new_items) == 0 and _looks_like_item_request(transcript):
+        msg = get_item_not_on_menu_message(restaurant_name)
+        conversation_history.append({"role": "user", "content": transcript})
+        conversation_history.append({"role": "assistant", "content": msg})
+        if len(conversation_history) > _MAX_HISTORY_MESSAGES:
+            conversation_history = conversation_history[-_MAX_HISTORY_MESSAGES:]
+        for ch in tts_model.stream_tts_sync(clean_for_tts(msg)):
+            yield ch
+        yield AdditionalOutputs(*_get_ui_state())
+        return
 
     # 5. Build messages for LLM
     system_content = build_system_prompt(_MENU, current_state)
